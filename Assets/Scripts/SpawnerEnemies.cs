@@ -5,7 +5,7 @@ public class SpawnerEnemies : MonoBehaviour
 {
     [SerializeField] private Enemy _prefabEnemy;
     [SerializeField] private Map _map;
-    [SerializeField] private Diraction _diraction;
+    [SerializeField] private Direction _direction;
     [SerializeField] private WalkZone _walkZone;
 
     private ObjectPool<Enemy> _poolEnemies;
@@ -53,7 +53,7 @@ public class SpawnerEnemies : MonoBehaviour
 
     public void CreateDirection(Enemy enemy)
     {
-        Vector3 randomDirection = _diraction.GetRandomDirection();
+        Vector3 randomDirection = _direction.GetRandomDirection();
 
         enemy.transform.position = _map.DefinePosition();
 
