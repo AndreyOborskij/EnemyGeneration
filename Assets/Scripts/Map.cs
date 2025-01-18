@@ -1,17 +1,17 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Map : MonoBehaviour
 {
-    [SerializeField] private SpawnerNPC _spawnerNPC;
-    [SerializeField] private List<Start> _startPositions;
+    [SerializeField] private SpawnerEnemies _spawnerEnemies;
+    [SerializeField] private List<Transform> _startPositions;
 
     private float _repeatRate = 2.0f;
-    private float _startTime = 0.0f;
 
     private void Start()
     {
-        InvokeRepeating(nameof(SpawnNPC), _startTime, _repeatRate);
+        StartCoroutine(StartMovement());
     }
 
     public Vector3 DefinePosition()
@@ -21,8 +21,18 @@ public class Map : MonoBehaviour
         return _startPositions[randomPoint].transform.position;
     }
 
-    private void SpawnNPC()
+    private void SpawnEnemy()
     {
-        _spawnerNPC.GetNPC();
+        _spawnerEnemies.GetEnemy();
+    }
+
+    private IEnumerator StartMovement()
+    {
+        while (true)
+        {
+            SpawnEnemy();
+
+            yield return new WaitForSeconds(_repeatRate);
+        }
     }
 }
