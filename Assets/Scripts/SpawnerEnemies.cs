@@ -4,7 +4,6 @@ using UnityEngine.Pool;
 public class SpawnerEnemies : MonoBehaviour
 {
     [SerializeField] private Enemy _prefabEnemy;
-    [SerializeField] private Map _map;
     [SerializeField] private Direction _direction;
     [SerializeField] private WalkZone _walkZone;
 
