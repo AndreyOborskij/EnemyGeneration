@@ -9,8 +9,7 @@ public class Direction : MonoBehaviour
     {
         float randomX = Random.Range(_minValue, _maxValue);
         float randomZ = Random.Range(_minValue, _maxValue);
-        Vector3 direction = new Vector3(randomX, 0, randomZ).normalized;
 
-        return direction;
+        return new Vector3(randomX, 0, randomZ).normalized;
     }
 }

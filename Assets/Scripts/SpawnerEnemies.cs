@@ -9,6 +9,7 @@ public class SpawnerEnemies : MonoBehaviour
     [SerializeField] private WalkZone _walkZone;
 
     private ObjectPool<Enemy> _poolEnemies;
+    private Vector3 _startPosition;
 
     private void Awake()
     {
@@ -29,8 +30,10 @@ public class SpawnerEnemies : MonoBehaviour
         _walkZone.LeftZone -= ReturnEnemy;
     }
 
-    public void GetEnemy()
+    public void GetEnemy(Vector3 startPosition)
     {
+        _startPosition = startPosition;
+
         _poolEnemies.Get();
     }
 
@@ -55,7 +58,7 @@ public class SpawnerEnemies : MonoBehaviour
     {
         Vector3 randomDirection = _direction.GetRandomDirection();
 
-        enemy.transform.position = _map.DefinePosition();
+        enemy.transform.position = _startPosition;
 
         enemy.SetDirection(randomDirection);
     }

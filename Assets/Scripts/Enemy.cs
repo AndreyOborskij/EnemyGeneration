@@ -8,7 +8,7 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
-        transform.Translate(_currentDiraction * _movementSpeed * Time.deltaTime);
+        transform.Translate(_currentDiraction * _movementSpeed * Time.deltaTime, Space.World);
     }
 
     public void SetDirection(Vector3 direction)
