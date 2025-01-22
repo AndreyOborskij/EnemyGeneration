@@ -11,22 +11,23 @@ public class Map : MonoBehaviour
 
     private void Start()
     {
-        StartCoroutine(StartMovement());
+        StartCoroutine(StartSpawn());
     }
 
-    private Vector3 DefinePosition()
+    private Vector3 SetStartPosition()
     {
-        int randomPoint = Random.Range(0, _startPositions.Count);
+        int randomPosition = Random.Range(0, _startPositions.Count);
 
-        return _startPositions[randomPoint].transform.position;
+        return _startPositions[randomPosition].position;
     }
 
     private void SpawnEnemy()
     {
-        _spawnerEnemies.GetEnemy(DefinePosition());
+        _spawnerEnemies.GetStartPosition(SetStartPosition());
+        _spawnerEnemies.GetEnemy();
     }
 
-    private IEnumerator StartMovement()
+    private IEnumerator StartSpawn()
     {
         var wait = new WaitForSeconds(_repeatRate);
 

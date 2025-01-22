@@ -11,7 +11,7 @@ public class Enemy : MonoBehaviour
         transform.Translate(_currentDiraction * _movementSpeed * Time.deltaTime, Space.World);
     }
 
-    public void SetDirection(Vector3 direction)
+    public void GetDirection(Vector3 direction)
     {
         _currentDiraction = direction;
     }

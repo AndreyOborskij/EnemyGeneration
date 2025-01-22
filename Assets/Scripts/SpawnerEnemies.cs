@@ -4,8 +4,7 @@ using UnityEngine.Pool;
 public class SpawnerEnemies : MonoBehaviour
 {
     [SerializeField] private Enemy _prefabEnemy;
-    [SerializeField] private Map _map;
-    [SerializeField] private Direction _direction;
+    [SerializeField] private DirectionGenerator _directionGenerator;
     [SerializeField] private WalkZone _walkZone;
 
     private ObjectPool<Enemy> _poolEnemies;
@@ -15,8 +14,8 @@ public class SpawnerEnemies : MonoBehaviour
     {
         _poolEnemies = new ObjectPool<Enemy>(
             createFunc: () => Instantiate(_prefabEnemy),
-            actionOnGet: (enemy) => ActionOnGet(enemy),
-            actionOnRelease: (enemy) => ActionOnRelease(enemy)
+            actionOnGet: (enemy) => ActivateEnemy(enemy),
+            actionOnRelease: (enemy) => DeactivateEnemy(enemy)
             );
     }
 
@@ -30,10 +29,8 @@ public class SpawnerEnemies : MonoBehaviour
         _walkZone.LeftZone -= ReturnEnemy;
     }
 
-    public void GetEnemy(Vector3 startPosition)
+    public void GetEnemy()
     {
-        _startPosition = startPosition;
-
         _poolEnemies.Get();
     }
 
@@ -42,24 +39,27 @@ public class SpawnerEnemies : MonoBehaviour
         _poolEnemies.Release(enemy);
     }
 
-    private void ActionOnGet(Enemy enemy)
+    public void GetStartPosition(Vector3 startPosition)
     {
-        CreateDirection(enemy);
+        _startPosition = startPosition;
+    }
+
+    private void ActivateEnemy(Enemy enemy)
+    {
+        SetStartPosition(enemy);
+
+        enemy.GetDirection(_directionGenerator.Create());
 
         enemy.gameObject.SetActive(true);
     }
 
-    private void ActionOnRelease(Enemy enemy)
+    private void DeactivateEnemy(Enemy enemy)
     {
         enemy.gameObject.SetActive(false);
     }
 
-    public void CreateDirection(Enemy enemy)
+    private void SetStartPosition(Enemy enemy)
     {
-        Vector3 randomDirection = _direction.GetRandomDirection();
-
         enemy.transform.position = _startPosition;
-
-        enemy.SetDirection(randomDirection);
     }
 }
