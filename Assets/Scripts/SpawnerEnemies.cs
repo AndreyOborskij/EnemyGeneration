@@ -1,18 +1,18 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
 
 public class SpawnerEnemies : MonoBehaviour
 {
     [SerializeField] private Enemy _prefabEnemy;
-<<<<<<< HEAD
     [SerializeField] private DirectionGenerator _directionGenerator;
-=======
-    [SerializeField] private Direction _direction;
->>>>>>> 3a2af0bfb5297c48560ae44a513d5cd94cd660c9
     [SerializeField] private WalkZone _walkZone;
+    [SerializeField] private List<Transform> _startPositions;
 
     private ObjectPool<Enemy> _poolEnemies;
-    private Vector3 _startPosition;
+    //private Vector3 _startPosition;
+    private float _repeatRate = 2.0f;
 
     private void Awake()
     {
@@ -25,34 +25,34 @@ public class SpawnerEnemies : MonoBehaviour
 
     private void OnEnable()
     {
-        _walkZone.LeftZone += ReturnEnemy;
+        _walkZone.LeftZone += CameBackEnemy;
+    }
+
+    private void Start()
+    {
+        StartCoroutine(StartSpawn());
     }
     
     private void OnDisable()
     {
-        _walkZone.LeftZone -= ReturnEnemy;
+        _walkZone.LeftZone -= CameBackEnemy;
     }
 
-    public void GetEnemy()
+    private void GetEnemy()
     {
         _poolEnemies.Get();
     }
 
-    public void ReturnEnemy(Enemy enemy)
+    public void CameBackEnemy(Enemy enemy)
     {
         _poolEnemies.Release(enemy);
     }
 
-    public void GetStartPosition(Vector3 startPosition)
-    {
-        _startPosition = startPosition;
-    }
-
     private void ActivateEnemy(Enemy enemy)
     {
-        SetStartPosition(enemy);
+        PassStartPosition(enemy);
 
-        enemy.GetDirection(_directionGenerator.Create());
+        enemy.ReceiveDirection(_directionGenerator.Create());
 
         enemy.gameObject.SetActive(true);
     }
@@ -62,8 +62,27 @@ public class SpawnerEnemies : MonoBehaviour
         enemy.gameObject.SetActive(false);
     }
 
-    private void SetStartPosition(Enemy enemy)
+    private void PassStartPosition(Enemy enemy)
     {
-        enemy.transform.position = _startPosition;
+        enemy.transform.position = DetermineStartPosition();
+    }
+
+    private Vector3 DetermineStartPosition()
+    {
+        int randomPosition = Random.Range(0, _startPositions.Count);
+
+        return _startPositions[randomPosition].position;
+    }
+
+    private IEnumerator StartSpawn()
+    {
+        var wait = new WaitForSeconds(_repeatRate);
+
+        while (true)
+        {
+            GetEnemy();
+
+            yield return wait;
+        }
     }
 }
