@@ -11,7 +11,6 @@ public class SpawnerEnemies : MonoBehaviour
     [SerializeField] private List<Transform> _startPositions;
 
     private ObjectPool<Enemy> _poolEnemies;
-    //private Vector3 _startPosition;
     private float _repeatRate = 2.0f;
 
     private void Awake()
